@@ -1,4 +1,4 @@
-package main;
+package generator;
 
 public class Pixel {
     public int x;

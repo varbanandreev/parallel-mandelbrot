@@ -1,5 +1,7 @@
 package main;
 
+import visualizer.MandelbrotFractalVisualizer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
         Options options = readArgs(args);
+        MandelbrotFractalVisualizer visualizer = new MandelbrotFractalVisualizer(options);
+        visualizer.drawFractal();
     }
 
     private static Options readArgs(String[] args) {

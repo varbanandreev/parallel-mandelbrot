@@ -3,6 +3,8 @@ package main;
 import java.util.Map;
 
 public class Options {
+    private static final int MAX_THREADS = 8;
+
     private int pictureWidth;
     private int pictureHeight;
     private double planeStartX;
@@ -62,6 +64,10 @@ public class Options {
         this.planeEndY = Double.parseDouble(optionValueSplit[3]);
 
         this.threadCount = Integer.parseInt(options.getOrDefault("tasks", "1"));
+        if (this.threadCount > MAX_THREADS) {
+            this.threadCount = MAX_THREADS;
+        }
+
         this.fileName = options.getOrDefault("output", "zad16.png");
         this.isQuiet = Boolean.parseBoolean(options.getOrDefault("quiet", "false"));
     }

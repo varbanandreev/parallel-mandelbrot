@@ -1,20 +1,22 @@
 package generator;
 
+import java.math.BigDecimal;
+
 public class MandelbrotNumber {
-    private double realPart;
-    private double imaginaryPart;
+    private BigDecimal realPart;
+    private BigDecimal imaginaryPart;
     private int iterations;
 
-    public MandelbrotNumber(double realPart, double imaginaryPart) {
+    public MandelbrotNumber(BigDecimal realPart, BigDecimal imaginaryPart) {
         this.realPart = realPart;
         this.imaginaryPart = imaginaryPart;
     }
 
-    public double getRealPart() {
+    public BigDecimal getRealPart() {
         return realPart;
     }
 
-    public double getImaginaryPart() {
+    public BigDecimal getImaginaryPart() {
         return imaginaryPart;
     }
 
@@ -28,7 +30,7 @@ public class MandelbrotNumber {
 
     @Override
     public int hashCode() {
-        String stringValue = String.format("%f%f%d", this.realPart, this.imaginaryPart, this.iterations);
+        String stringValue = String.format("%f%f", this.realPart, this.imaginaryPart);
         return stringValue.hashCode();
     }
 

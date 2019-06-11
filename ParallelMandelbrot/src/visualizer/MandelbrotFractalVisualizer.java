@@ -19,8 +19,8 @@ import java.util.logging.Logger;
 public class MandelbrotFractalVisualizer implements MandelbrotSetReceiver {
     private static final int MAX_ITERATIONS = 1000;
 
-    private static final Color[] PALETTE = {Color.YELLOW, Color.WHITE, Color.GREEN, Color.BLACK,
-            Color.RED, Color.CYAN, Color.MAGENTA, Color.ORANGE, Color.PINK};
+    private static final Color[] PALETTE = {Color.YELLOW, Color.WHITE, Color.GREEN, Color.RED,
+            Color.BLACK, Color.CYAN};
 
     private Options options;
 
@@ -57,7 +57,7 @@ public class MandelbrotFractalVisualizer implements MandelbrotSetReceiver {
         try {
             out.createNewFile();
         } catch (IOException e) {
-            Logger.getLogger("Visualizer").log(Level.WARNING,
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
                     "Output image file creation failed.", e);
 
         }
@@ -65,7 +65,7 @@ public class MandelbrotFractalVisualizer implements MandelbrotSetReceiver {
         try {
             ImageIO.write(this.canvas, "png", out);
         } catch (IOException e) {
-            Logger.getLogger("Visualizer").log(Level.WARNING,
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING,
                     "Image to file dump failed.", e);
         }
     }

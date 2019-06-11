@@ -1,6 +1,7 @@
 package generator;
 
 import main.Options;
+import performancetest.TestOptions;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,6 +14,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class MandelbrotSetGenerator {
+    private static BigDecimal MIN_X = BigDecimal.valueOf(-2.5);
+    private static BigDecimal MAX_X = BigDecimal.valueOf(1.0);
+    private static BigDecimal MIN_Y = BigDecimal.valueOf(-1.25);
+    private static BigDecimal MAX_Y = BigDecimal.valueOf(1.25);
+    private static BigDecimal X_INTERVAL = MAX_X.subtract(MIN_X);
+    private static BigDecimal Y_INTERVAL = MAX_Y.subtract(MIN_Y);
+
     private int maxIterations;
     private Options options;
     private MandelbrotSetReceiver receiver;
@@ -36,6 +44,14 @@ public class MandelbrotSetGenerator {
         this.executor = new ThreadPoolExecutor(this.options.getThreadCount(), this.options.getThreadCount(),
                 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>());
     }
+
+    public MandelbrotSetGenerator(TestOptions testOptions, MandelbrotSetReceiver receiver) {
+        this.executor = new ThreadPoolExecutor(testOptions.getNumberOfThreads(), testOptions.getNumberOfThreads(),
+                0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>());
+        this.maxIterations = testOptions.getMaxIterations();
+        this.receiver = receiver;
+    }
+
 
     public Map<MandelbrotNumber, Pixel> getPixelMapping() {
         return this.numberPixelMap;
@@ -70,6 +86,21 @@ public class MandelbrotSetGenerator {
         }
     }
 
+    public void generateNumbers(BigDecimal precision) {
+        synchronized (this) {
+            this.generatedNumbers = new ArrayList<>();
+
+            generateFinalNumberCount(precision);
+
+            for (BigDecimal realPart = MIN_X; realPart.doubleValue() <= MAX_X.doubleValue(); realPart = realPart.add(precision)) {
+                for (BigDecimal imaginaryPart = MIN_Y; imaginaryPart.doubleValue() <= MAX_Y.doubleValue(); imaginaryPart = imaginaryPart.add(precision)) {
+                    MandelbrotNumber number = new MandelbrotNumber(realPart, imaginaryPart);
+                    computeBoundedIterations(number);
+                }
+            }
+        }
+    }
+
     void computationIsCompleted(MandelbrotNumber number) {
         synchronized (this.generatedNumbers) {
             this.generatedNumbers.add(number);
@@ -82,6 +113,12 @@ public class MandelbrotSetGenerator {
 
     public void shutdown() {
         this.executor.shutdown();
+    }
+
+    private void generateFinalNumberCount(BigDecimal precision) {
+        BigDecimal xValueCount = X_INTERVAL.divide(precision, 8, RoundingMode.FLOOR).add(BigDecimal.valueOf(1));
+        BigDecimal yValueCount = Y_INTERVAL.divide(precision, 8, RoundingMode.FLOOR).add(BigDecimal.valueOf(1));
+        this.finalNumberCount = (xValueCount.multiply(yValueCount)).intValue();
     }
 
 

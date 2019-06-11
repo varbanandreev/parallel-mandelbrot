@@ -10,13 +10,13 @@ public class IterationsComputer {
     }
 
     public void computeIterations(MandelbrotNumber number) {
-        double x = 0;
-        double y = 0;
+        double x = number.getRealPart().doubleValue();
+        double y = number.getImaginaryPart().doubleValue();
         int iterations = 0;
 
         while (iterations < this.maxIterations && !hasEscaped(x, y)) {
-            double nextX = x * x - y * y + number.getRealPart().doubleValue()/* * Math.pow(Math.E, -x) * Math.cos(-y)*/;
-            double nextY = 2 * x * y + number.getImaginaryPart().doubleValue()/* * Math.pow(Math.E, -x) * Math.sin(-y)*/;
+            double nextX = x * x - y * y + number.getRealPart().doubleValue() * Math.pow(Math.E, -x) * Math.cos(y);
+            double nextY = 2 * x * y - number.getImaginaryPart().doubleValue() * Math.pow(Math.E, -x) * Math.sin(y);
 
             x = nextX;
             y = nextY;

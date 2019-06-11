@@ -3,8 +3,8 @@ package performancetest;
 import java.math.BigDecimal;
 
 public class TestOptions {
-    private static final BigDecimal DEFAULT_PRECISION = BigDecimal.valueOf(0.002);
-    private static final int DEFAULT_MAX_ITERATIONS = 10000;
+    private static final BigDecimal DEFAULT_PRECISION = BigDecimal.valueOf(0.005);
+    private static final int DEFAULT_MAX_ITERATIONS = 1000;
 
     private int numberOfThreads;
     private BigDecimal precision;
